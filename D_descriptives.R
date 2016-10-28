@@ -30,10 +30,10 @@ c(list(all=df),split(df,df$racohbyr))->tmp
 table(df$radyear,df$geno,useNA="ifany")->tab
 dump("tab","")
 nrow(tab)->N
-#png("~/Downloads/deaths.png",units="in",height=10,width=8,res=150,pointsize=13)
-#barplot(t(tab[-N,]),beside=TRUE,col=c("black","gray"),ylab="# Deaths",xlab="Death Year")
-#legend("topright",bty="n",lty=1,lwd=4,col=c("black","gray"),c("Non-Genotyped","Genotyped"))
-#dev.off()
+png("~/Downloads/deaths.png",units="in",height=10,width=8,res=150,pointsize=13)
+barplot(t(tab[-N,]),beside=TRUE,col=c("black","gray"),ylab="# Deaths",xlab="Death Year")
+legend("topright",bty="n",lty=1,lwd=4,col=c("black","gray"),c("Non-Genotyped","Genotyped"))
+dev.off()
 
 
 fun<-function(x) {

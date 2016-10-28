@@ -68,18 +68,20 @@ save(df,file="~/hrs/mortality/association.Rdata")
 
 
 load(file="~/hrs/mortality/association.Rdata")
-fun<-function(df,wt.nm) {
+fun<-function(df,wt.nm,nm) {
     df[[wt.nm]]->df$wt
-    plot(NULL,xlim=c(0.1,3.2),ylim=c(0,12),xlab="Weights",ylab="Density",main=wt.nm)
-    lines(density(df$wt[df$geno==0 & df$ragender=="2.female"]),lty=1,col="black",lwd=2)
-    lines(density(df$wt[df$geno==1 & df$ragender=="2.female"]),lty=2,col="black",lwd=2)
-    lines(density(df$wt[df$geno==0 & df$ragender=="1.male"]),lty=1,col="gray",lwd=2)
-    lines(density(df$wt[df$geno==1 & df$ragender=="1.male"]),lty=2,col="gray",lwd=2)
-    legend("topright",bty="n",lwd=2,lty=c(1,2,1,2),col=c("black","black","gray","gray"),c("Female, not genotyped","Female, genotyped","Male, not genotyped","Male, genotyped"))
+    plot(NULL,xlim=c(0.1,3.2),ylim=c(0,12),xlab="Weights",ylab="Density")
+    mtext(side=3,line=1,nm)
+    lines(density(df$wt[df$geno==0]),lty=1,col="black",lwd=3)
+    lines(density(df$wt[df$geno==1]),lty=1,col="gray",lwd=3)
+    legend("topright",bty="n",lwd=3,col=c("black","gray"),c("not genotyped","genotyped"))
 }
-par(mfrow=c(2,1))
-fun(df,wt.nm="wt.byear")
-fun(df,wt.nm="wt.health")
+par(mfrow=c(2,2),mgp=c(2,1,0),mar=c(3.3,3.3,2.3,1))
+split(df,df$ragender)->tmp
+fun(tmp[["1.male"]],wt.nm="wt.health",nm=c("Males, health only"))
+fun(tmp[["2.female"]],wt.nm="wt.health",nm=c("Females, health only"))
+fun(tmp[["1.male"]],wt.nm="wt.byear",nm=c("Males, with birthyear"))
+fun(tmp[["2.female"]],wt.nm="wt.byear",nm=c("Females, with birthyear"))
 
 
 

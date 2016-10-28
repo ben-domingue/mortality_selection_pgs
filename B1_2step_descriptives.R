@@ -80,7 +80,7 @@ df1[df1$proxy!=1,]->df2
 
 
 ##refusers
-load("/tmp/geno_refusal.Rdata") #see B3_saliva_consent.R
+load("~/hrs/mortality/geno_refusal.Rdata") #see B3_saliva_consent.R
 merge(df2,gr,all.x=TRUE)->df3
 ifelse(df3$KI913==5 | df3$LI913==5,1,0)->df3$refuse
 ifelse(is.na(df3$refuse),0,df3$refuse)->df3$refuse

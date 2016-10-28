@@ -44,7 +44,7 @@ df[,c("HHID","PN","LI913")]->df2008
 merge(df2006,df2008,all=TRUE)->df
 as.character(as.numeric(df$HHID)*1000+as.numeric(df$PN))->df$hhidpn
 df->gr
-save(df,file="/tmp/geno_refusal.Rdata")
+save(df,file="~/hrs/mortality/geno_refusal.Rdata")
 
 ## readLines("~/hrs/mortality/phs000428.v1.pht002614.v1.p1.c1.phenotype_HRS_2006_2008.NPR.txt")->coll
 ## grep("^dbGaP",coll)->index

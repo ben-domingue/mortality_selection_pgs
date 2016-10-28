@@ -61,6 +61,7 @@ for (i in 1:length(dfL)) {
 
 df[!is.na(df$vN_education2_nc.pgs),]->tmp
 density(tmp$rabyear)->den
+par(mgp=c(2,1,0))
 plot(den,xlim=c(1910,1960),main="",xlab="Birth year")
 which.min(abs(den$x-1919))->i1
 which.min(abs(den$x-1955))->i2
