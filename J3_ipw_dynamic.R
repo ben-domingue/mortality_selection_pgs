@@ -1,4 +1,35 @@
-#this applies ipw
+#mod is a list of lm objects
+table.lm<-function(mod) {
+  lapply(mod,function(x) names(coef(x)))->nms
+  unique(do.call("c",nms))->nms
+  length(nms)->nr
+  length(mod)->nc
+  mat.est<-mat.tstat<-matrix(NA,nr,nc)
+  for (j in 1:nc) {
+    summary(mod[[j]])$coef->foo
+    for (i in 1:nr) {
+      match(nms[i],rownames(foo))->index
+      if (length(index)>0) {
+        foo[index,1]->mat.est[i,j]
+        foo[index,3]->mat.tstat[i,j]
+      }
+    }
+  }
+  sapply(mod,function(x) length(residuals(x)))->N
+  out<-list()
+  new.nms<-list()
+  for (i in 1:nr) {
+    rbind(mat.est[i,],mat.tstat[i,])->out[[i]]
+    new.nms[[i]]<-c(nms[i],paste(nms[i],".se",sep=""))
+  }
+  do.call("rbind",out)->out
+  rbind(out,N)->out
+  c(do.call("c",new.nms),"N")->rownames(out)
+  out
+}
+
+
+                                        #this applies ipw
 
 
 load(file="~/hrs/mortality/association.Rdata")
@@ -21,8 +52,8 @@ dyn.bigf<-function(df,leg=TRUE,title=NULL) {
         formula(paste(outcome,".std~",pgs,"*rabyear.raw",sep=""))->fm.pg
         lm(fm.pg,df[is.na(df$radyear),])->mods$still.alive
         lm(fm.pg,df)->mods$naive
-        print(length(mods$naive$resid))
-        print(summary(mods$naive))
+        #print(length(mods$naive$resid))
+        #print(summary(mods$naive))
                                         #reduced sample
         ## df$racohbyr!="1.ahead" -> test1
         ## df$racohbyr!="6.mid babyboomers" -> test2
@@ -31,6 +62,7 @@ dyn.bigf<-function(df,leg=TRUE,title=NULL) {
                                         #ipw
         svyglm(fm.pg,design = svydesign(~ 1, weights = ~ wt.health,data=df))->mods$ipw1
         svyglm(fm.pg,design = svydesign(~ 1, weights = ~ wt.byear,data=df))->mods$ipw2
+        print(table.lm(mods))
         mods
     }
     mod.dyn<-tab<-list()
@@ -134,42 +166,42 @@ dev.off()
 ##table
 
 
-assoc_fun<-function(pgs,outcome,df,fm.selection) {
-    mods<-list()
-    #raw
-    formula(paste(outcome,".std~",pgs,"*rabyear.raw+gender*rabyear.raw+gender*",pgs,sep=""))->fm.pg
-    lm(fm.pg,df[is.na(df$radyear),])->mods$still.alive
-    lm(fm.pg,df)->mods$naive
-    print(length(mods$naive$resid))
-    print(summary(mods$naive))
-    #reduced sample
-    ## df$racohbyr!="1.ahead" -> test1
-    ## df$racohbyr!="6.mid babyboomers" -> test2
-    ## df[test1 & test2,]->df.reduced
-    ## lm(fm.pg,df.reduced)->mods$reduced
-    #ipw
-    svyglm(fm.pg,design = svydesign(~ 1, weights = ~ wt.health,data=df))->mods$ipw1
-    svyglm(fm.pg,design = svydesign(~ 1, weights = ~ wt.byear,data=df))->mods$ipw2
-    #lm(fm.pg,df[df$rabyear.raw.raw>1919,])->mods$no.old
-    mods
-}
-## fun<-function(z) {
-##     table.lm(z)->tab
-##     apply(tab,2,unlist)->tab
-##     do.call("cbind",tab)->tab
-##     tab[-nrow(tab),]->tab
-##     cbind(tab,tab[,2]/tab[,1],tab[,3]/tab[,1])->tab
-##     tab[,c(1,4,5)]
+## assoc_fun<-function(pgs,outcome,df,fm.selection) {
+##     mods<-list()
+##     #raw
+##     formula(paste(outcome,".std~",pgs,"*rabyear.raw+gender*rabyear.raw+gender*",pgs,sep=""))->fm.pg
+##     lm(fm.pg,df[is.na(df$radyear),])->mods$still.alive
+##     lm(fm.pg,df)->mods$naive
+##     print(length(mods$naive$resid))
+##     print(summary(mods$naive))
+##     #reduced sample
+##     ## df$racohbyr!="1.ahead" -> test1
+##     ## df$racohbyr!="6.mid babyboomers" -> test2
+##     ## df[test1 & test2,]->df.reduced
+##     ## lm(fm.pg,df.reduced)->mods$reduced
+##     #ipw
+##     svyglm(fm.pg,design = svydesign(~ 1, weights = ~ wt.health,data=df))->mods$ipw1
+##     svyglm(fm.pg,design = svydesign(~ 1, weights = ~ wt.byear,data=df))->mods$ipw2
+##     #lm(fm.pg,df[df$rabyear.raw.raw>1919,])->mods$no.old
+##     mods
 ## }
+## ## fun<-function(z) {
+## ##     table.lm(z)->tab
+## ##     apply(tab,2,unlist)->tab
+## ##     do.call("cbind",tab)->tab
+## ##     tab[-nrow(tab),]->tab
+## ##     cbind(tab,tab[,2]/tab[,1],tab[,3]/tab[,1])->tab
+## ##     tab[,c(1,4,5)]
+## ## }
 
-mod.dyn<-tab<-list()
-assoc_fun(outcome="bmi",pgs="bmi.pgs",df)->tab$all->mod.dyn$BMI
-assoc_fun(outcome="height",pgs="height.pgs",df)->tab$all->mod.dyn$Height
-assoc_fun(outcome="raedyrs",pgs="edu.pgs",df)->tab$all->mod.dyn$Education
-assoc_fun(outcome="smoke",pgs="smoke.pgs",df)->tab$all->mod.dyn$Smoke
+## mod.dyn<-tab<-list()
+## assoc_fun(outcome="bmi",pgs="bmi.pgs",df)->tab$all->mod.dyn$BMI
+## assoc_fun(outcome="height",pgs="height.pgs",df)->tab$all->mod.dyn$Height
+## assoc_fun(outcome="raedyrs",pgs="edu.pgs",df)->tab$all->mod.dyn$Education
+## assoc_fun(outcome="smoke",pgs="smoke.pgs",df)->tab$all->mod.dyn$Smoke
 
 
-lapply(mod.dyn,table.lm)
+## lapply(mod.dyn,table.lm)
 
 
 

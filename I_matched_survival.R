@@ -179,24 +179,24 @@ for (ii in 1:length(fm.list)) {
     tab->out[[ii]]
 }
 
-                                        #w/ oos
-set.seed(11213)
-out<-list()
-for (ii in 1:length(fm.list)) {
-    tab<-list()
-    for (i in 3:length(dfL)) {
-        tab.tmp<-list()
-        for (j in 1:100) {
-            mod.fun(names(dfL)[i],dfL,fm=fm.list[[ii]],oos=TRUE)->tab.tmp[[j]]
-        }
-        lapply(tab.tmp,"[[",1)->tab1
-        lapply(tab.tmp,"[[",2)->tab2
-        cbind(Reduce("+",tab1)/length(tab1),Reduce("+",tab2)/length(tab2))->tab3
-        tab3->tab[[names(dfL)[i]]]
-    }
-    do.call("rbind",tab)->tab
-    tab->out[[ii]]
-}
+##                                         #w/ oos
+## set.seed(11213)
+## out<-list()
+## for (ii in 1:length(fm.list)) {
+##     tab<-list()
+##     for (i in 3:length(dfL)) {
+##         tab.tmp<-list()
+##         for (j in 1:100) {
+##             mod.fun(names(dfL)[i],dfL,fm=fm.list[[ii]],oos=TRUE)->tab.tmp[[j]]
+##         }
+##         lapply(tab.tmp,"[[",1)->tab1
+##         lapply(tab.tmp,"[[",2)->tab2
+##         cbind(Reduce("+",tab1)/length(tab1),Reduce("+",tab2)/length(tab2))->tab3
+##         tab3->tab[[names(dfL)[i]]]
+##     }
+##     do.call("rbind",tab)->tab
+##     tab->out[[ii]]
+## }
 
 
 

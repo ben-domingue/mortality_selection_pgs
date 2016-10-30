@@ -25,6 +25,7 @@ wt_fun<-function(df) {
     df[,all.vars(fm.selection)]->tmp
     df[rowSums(is.na(tmp))==0,]->tmp
     ipwpoint(no.death,data=tmp,family="binomial",link="logit",numerator=~1,denominator=~raedyrs + bmi + height + smoke + cesd + diab + heart + gender+ rabyear,trunc=0.01)->wt
+    print(table(wt$weights==wt$weights.trunc))
     wt$weights.trunc->tmp$wt.byear
     tmp[,c("hhidpn","wt.byear")]->wt
     merge(df,tmp,all.x=TRUE)
@@ -38,6 +39,7 @@ wt_fun<-function(df) {
     df[rowSums(is.na(tmp))==0,]->tmp
     ipwpoint(no.death,data=tmp,family="binomial",link="logit",numerator=~1,denominator=~raedyrs + bmi + height + smoke + cesd + diab + heart + gender,trunc=0.01)->wt
     wt$weights.trunc->tmp$wt.health
+    print(table(wt$weights==wt$weights.trunc))
     tmp[,c("hhidpn","wt.health")]->wt
     merge(df,tmp,all.x=TRUE)
 }

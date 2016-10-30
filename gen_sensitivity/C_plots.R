@@ -4,7 +4,7 @@ library(ipw)
 library(survey)
 library(gplots)
 
-pdf("/tmp/fig.pdf",width=6,height=6)
+png("/tmp/sense-static.png",units="in",height=11,width=7,res=100)
 par(mfrow=c(2,2),mgp=c(2,1,0),mar=c(3.1,3.1,2,1))
 
 xl<-c(0,.55)
