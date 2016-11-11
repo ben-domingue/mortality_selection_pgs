@@ -40,7 +40,7 @@ fancy.nms<-list(male=paste("Males, n=",nrow(dfL$male),sep=""),
                 female=paste("Females, n=",nrow(dfL$female),sep="")
                 )
                                         #png("/tmp/land_pgs.png",units="in",height=10,width=8,res=100)
-png(paste("/tmp/means.png",sep=""),units="in",height=8,width=6,res=150,pointsize=13)
+png(paste("/tmp/fig4.png",sep=""),units="in",height=8,width=6,res=150,pointsize=13)
 par(mfcol=c(4,2),mgp=c(2.1,1,0),mar=c(0,1,0,1),oma=c(3.5,3.5,2,1))
 for (i in 1:length(dfL)) {
     dfL[[i]]->df

@@ -57,7 +57,7 @@ fun<-function(x,var) {
 }
 vars<-c("raedyrs","bmi","height","smoke","cesd","diab","heart","srh")
 
-png(paste("/tmp/desc.png",sep=""),units="in",height=8,width=6,res=150,pointsize=13)
+png(paste("/tmp/fig3.png",sep=""),units="in",height=8,width=6,res=150,pointsize=13)
 par(mfrow=c(4,2),mar=c(3,4,0.5,0.5),mgp=c(1.5,.75,0),oma=rep(.5,4))
 for (i in 1:length(vars)) fun(df,vars[i])
 legend("bottomleft",bty="n",c("Not genotyped","Genotyped"),lwd=2,lty=1,col=c("black","darkgray"))

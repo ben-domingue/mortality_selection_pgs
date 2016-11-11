@@ -149,12 +149,13 @@ dyn.bigf<-function(df,leg=TRUE,title=NULL) {
 #par(mfrow=c(2,2),mar=c(3,3,1,1.2),mgp=c(2,1,0),oma=c(1,1,1,1))
 #dyn.bigf(df)
 
-pdf("/tmp/dyn.pdf")
+png(paste("/tmp/fig5.png",sep=""),units="in",height=8,width=6,res=150,pointsize=13)
+#pdf("/tmp/dyn.pdf")
 matrix(c(1,1,2,3,3,4,5,5,6,7,7,8),4,3,byrow=TRUE)->m1
 matrix(c(9,9,10,11,11,12,13,13,14,15,15,16),4,3,byrow=TRUE)->m2
 layout(cbind(m1,m2))
 par(mar=c(3,3,1,.5),mgp=c(2,1,0),oma=c(1,1,1,1))
-dyn.bigf(df[df$gender=="female",])
+dyn.bigf(df[df$gender=="female",],leg=FALSE)
 mtext(side=1,line=3,"Females")
 dyn.bigf(df[df$gender=="male",])
 mtext(side=1,line=3,"Males")

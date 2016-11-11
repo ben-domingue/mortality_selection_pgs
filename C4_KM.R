@@ -30,7 +30,7 @@ fun<-function(nm,dfL) {
     legend("bottomleft",bty="n",c("Genotyped","Not Genotyped"),lty=1,lwd=3,col=c("darkgray","black"))
 }
 
-png("/tmp/km.png",units="in",height=6,width=8,res=150,pointsize=13)
+png("/tmp/fig2.png",units="in",height=6,width=8,res=150,pointsize=13)
 par(mfrow=c(2,2),mar=c(3,3,1.5,0.5),mgp=c(1.5,.6,0),oma=rep(.5,4))
 lapply(names(dfL),fun,dfL)
 dev.off()
