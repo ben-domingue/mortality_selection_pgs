@@ -29,7 +29,7 @@ dev.off()
 #sho residuals
 fun<-function(nm,dfL) {
     dfL[[nm]]->df
-    coxph(Surv(time=duration.time,event=dead)~geno*age.first.interview+geno*rabyear,df,control=coxph.control(iter=5000))->mod
+    coxph(Surv(time=duration.time,event=dead)~geno*age.first.interview+rabyear,df,control=coxph.control(iter=5000))->mod
     zph.mod<- cox.zph(mod, transform= "rank")
 }
 lapply(names(dfL),fun,dfL)->sho
@@ -48,7 +48,7 @@ dev.off()
 #correlation of sho residuals
 fun<-function(nm,dfL) {
     dfL[[nm]]->df
-    coxph(Surv(time=duration.time,event=dead)~geno*age.first.interview+geno*rabyear,df,control=coxph.control(iter=5000))->mod
+    coxph(Surv(time=duration.time,event=dead)~geno*age.first.interview+rabyear,df,control=coxph.control(iter=5000))->mod
     zph.mod<- cox.zph(mod, transform= "rank")
     rank(df$radyear[df$dead==1])->ran #does this seem right?
     cor(cbind(ran,zph.mod$y))[,1]
@@ -59,7 +59,7 @@ do.call("rbind",sho)->tab
 
 
 
-
+###############################################################################old models
 ## #logrank
 ## fun<-function(nm,dfL) {
 ##     print(nm)

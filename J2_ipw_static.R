@@ -11,7 +11,7 @@ table.lm<-function(mod) {
       match(nms[i],rownames(foo))->index
       if (length(index)>0) {
         foo[index,1]->mat.est[i,j]
-        foo[index,3]->mat.tstat[i,j]
+        foo[index,2]->mat.tstat[i,j]
       }
     }
   }
@@ -62,10 +62,10 @@ static.bigf<-function(df,leg=TRUE,title=NULL,xl=c(0,0.425)) {
         do.call("rbind",tab)
     }
     mod<-list()
-    fn("bmi.std~bmi.pgs+ragender",df)->mod$BMI
-    fn("height.std~height.pgs+ragender",df)->mod$Height
-    fn("raedyrs.std~edu.pgs+ragender",df)->mod$Edu
-    fn("smoke.std~smoke.pgs+ragender",df)->mod$Smoke
+    fn("bmi.std~bmi.pgs+ragender+rabyear",df)->mod$BMI
+    fn("height.std~height.pgs+ragender+rabyear",df)->mod$Height
+    fn("raedyrs.std~edu.pgs+ragender+rabyear",df)->mod$Edu
+    fn("smoke.std~smoke.pgs+ragender+rabyear",df)->mod$Smoke
     mod->mod.static
     tab<-list()
     for (nm in c("BMI","Height","Edu","Smoke")) {
@@ -90,7 +90,9 @@ static.bigf<-function(df,leg=TRUE,title=NULL,xl=c(0,0.425)) {
     text(est+1.96*se,out,round(est,digits=3),cex=1,offset=1,pos=4)
     if (!is.null(title)) mtext(side=3,line=.2,title)
     if (leg) legend("topright",bty="n",cex=1,rev(c("Enh mortality","Naive","Wt, hlt only","Wt, hlt + byear")),fill=rev(gray(seq(.9,.3,length.out=ncol(est)))),density=rev(c(-10,35,-10,-10)))
-    tabS
+    tabS[,c(1,3,5,7)]->est
+    tabS[,1+c(1,3,5,7)]->se
+    rbind(est[1,],se[1,],est[2,],se[2,],est[3,],se[3,],est[4,],se[4,])
 }
 
 png("/tmp/static.png",units="in",height=5,width=6,res=100)

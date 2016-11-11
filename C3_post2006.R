@@ -26,7 +26,7 @@ library(survey)
 fun<-function(nm,dfL) {
     print(nm)
     dfL[[nm]]->df
-    coxph(Surv(time=duration.time,event=dead)~geno*age.first.interview+geno*rabyear,df,control=coxph.control(iter=5000))->mod
+    coxph(Surv(time=duration.time,event=dead)~geno*age.first.interview+rabyear,df,control=coxph.control(iter=5000))->mod
     print(mod)
     ##
     #plot(NULL,xlab="Age",ylab="",xlim=c(50,max(df$age,na.rm=TRUE)),ylim=c(.5,1),main=nm)

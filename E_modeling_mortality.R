@@ -1,4 +1,4 @@
-#this creates data for IPW
+#this creates  data for IPW
 
 library(survival)
 library(survey)

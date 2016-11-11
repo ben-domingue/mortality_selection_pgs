@@ -92,6 +92,29 @@ lapply(tmp,fun)->tab
 do.call("rbind",sapply(tab,"[",1))->tab2a
 do.call("rbind",sapply(tab,"[",2))->tab2b
 
+ifelse(is.na(df$radyear),2,df$no.death)->df$death
+fun<-function(x,var) {
+    x[df$rabyear %in% 1910:1959,]->x
+    L<-list()
+    x[x$death==0,]->L[[1]] #died early
+    x[x$death>0,]->L[[2]] #lived through 2006
+    x[x$death==2,]->L[[3]] #still around
+    infun<-function(x,var) {
+        split(x,x$rabyear)->x
+        f<-function(x,var) c(unique(x$rabyear),mean(x[[var]],na.rm=TRUE))
+        lapply(x,f,var=var)->tmp
+        do.call("rbind",tmp)
+    }
+    tab<-lapply(L,infun,var=var)
+    plot(NULL,xlim=c(1910,1959),ylim=range(c(tab[[1]][,2],tab[[2]][,2],tab[[3]][,2])))
+    mtext(side=3,line=0,var)
+    lines(tab[[1]],col="black")
+    lines(tab[[2]],col="red")
+    lines(tab[[3]],col="blue")
+}
+vars<-c("raedyrs","bmi","height","smoke","cesd","diab","heart","srh")
+par(mfrow=c(4,2),mar=c(3,4,1.5,0.5),mgp=c(1.5,.75,0),oma=rep(.5,4))
+for (i in 1:length(vars)) fun(df,vars[i])
 
 #make a figure showing differences between those who died and those who did not.
 library(gplots)

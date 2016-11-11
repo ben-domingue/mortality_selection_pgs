@@ -137,7 +137,7 @@ mod.fun<-function(nm,fm,dfL,oos=FALSE) {
     tabL<-list()
     for (k in 1:length(L)) {
         L[[k]]->df
-        coxph(Surv(time=duration.time,event=dead)~geno*age.first.interview+geno*rabyear,df,control=coxph.control(iter=15000))->mod
+        coxph(Surv(time=duration.time,event=dead)~geno*age.first.interview+rabyear,df,control=coxph.control(iter=15000))->mod
         ##
         byear<-c(1930,1945)
         max(df$r11iwendy,na.rm=TRUE)->last.year

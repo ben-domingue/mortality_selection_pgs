@@ -11,7 +11,7 @@ table.lm<-function(mod) {
       match(nms[i],rownames(foo))->index
       if (length(index)>0) {
         foo[index,1]->mat.est[i,j]
-        foo[index,3]->mat.tstat[i,j]
+        foo[index,2]->mat.tstat[i,j]
       }
     }
   }
